@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include "../libs/cJSON.h" // https://github.com/DaveGamble/cJSON
 
 #define PORT 8080
 #define BUFFER_SIZE 1024
@@ -52,8 +53,31 @@ int main() {
         printf("Received request:\n%s\n", buffer);
 
         // send simple http response
-        const char *response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\nHello, world!";
+        //const char *response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\nHello, world!";
+
+        // let's try to use cJSON to send a JSON response instead of simple http/text
+        
+        // create cJSON object 
+        cJSON *json = cJSON_CreateObject();
+        cJSON_AddStringToObject(json, "name", "John Doe");
+        cJSON_AddNumberToObject(json, "age", 30);
+        cJSON_AddStringToObject(json, "email", "john.doe@email.com");
+
+        // convert cJSON object to a JSON string
+        char *json_str = cJSON_Print(json);
+        snprintf(response, sizeof(response),
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: application/json\r\n"
+                "Content-Length: %zu\r\n"
+                "\r\n"
+                "%s",
+                strlen(json_str), json_str);
+
+
         send(client_fd, response, strlen(response), 0);
+
+        cJSON_Delete(json);
+        free(json_str);
 
         // close client connection
         close(client_fd);
