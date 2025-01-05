@@ -12,28 +12,44 @@
 // error handling
 // - ensure proper responses to invalid input or system errors
 
-
 // networking tests
-int socket_test {
-
+int socket_test() {
+    // TODO 
     return 0;
 }
 
-int binding_test {
-
+int binding_test() {
+    // TODO 
     return 0;
 }
 
-int listening_test {
-    
+int listening_test() {
+    // TODO 
     return 0;
 }
 
 // utility function tests
+int parse_validate_test() {
+    // TODO 
+    return 0;
+}
 
+int config_file_parse_test() {
+    // TODO 
+    return 0;
+}
 
+int memory_management_test() {
+    // TODO 
+    return 0;
+}
 
 // error handling tests
+int error_tests {
+    // TODO 
+    return 0;
+}
+
 
 int main() {
     // networking tests
@@ -52,5 +68,27 @@ int main() {
         exit(1);
     }
     // utility function tests
+    if (parse_validate_test() != 0) {
+        perror("Parse validation test failed");
+        exit(1);
+    }
+
+    if (config_file_parse_test() != 0) {
+        perror("Config file parse test failed");
+        exit(1);
+    }
+    
+    if (memory_management_test() != 0) {
+        perror("Memory management test failed");
+        exit(1);
+    }
+
     // error handling tests
+    if (error_tests() != 0) {
+        perror("Error tests failed");
+        exit(1);
+    }
+
+    perror("Tests all passed!\n");
+    return 0;
 }
