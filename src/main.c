@@ -65,6 +65,10 @@ int main() {
 
         // convert cJSON object to a JSON string
         char *json_str = cJSON_Print(json);
+        
+        size_t response_length = strlen(json_str) + 128; // Extra space for HTTP headers
+        char *response = (char *)malloc(response_length);
+
         snprintf(response, sizeof(response),
                 "HTTP/1.1 200 OK\r\n"
                 "Content-Type: application/json\r\n"
@@ -78,6 +82,7 @@ int main() {
 
         cJSON_Delete(json);
         free(json_str);
+        free(response);
 
         // close client connection
         close(client_fd);
